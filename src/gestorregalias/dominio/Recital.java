@@ -16,4 +16,8 @@ public class Recital {
     public double getNeto() {
         return recaudacion - costosProduccion;
     }
+
+    public Date getFecha() {
+        return fecha;
+    }
 }

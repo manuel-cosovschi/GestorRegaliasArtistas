@@ -20,12 +20,20 @@ public abstract class Artista {
         this.recitales = new ArrayList<>();
     }
 
-    // Métodos getter y setter, según sea necesario
+    // Métodos getter
     public String getIdentificador() {
         return identificador;
     }
 
     public String getNombre() {
         return nombre;
+    }
+
+    public List<Disco> getDiscos() {
+        return discos;
+    }
+
+    public List<Recital> getRecitales() {
+        return recitales;
     }
 }

@@ -18,4 +18,8 @@ public class Disco {
     public String getNombre() {
         return nombre;
     }
+
+    public int getUnidadesVendidas() {
+        return unidadesVendidas;
+    }
 }
