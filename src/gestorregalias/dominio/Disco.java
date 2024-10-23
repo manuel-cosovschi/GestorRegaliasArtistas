@@ -22,4 +22,17 @@ public class Disco {
     public int getUnidadesVendidas() {
         return unidadesVendidas;
     }
+
+    @Override
+    public String toString() {
+        return "\nNombre: " + nombre + "\nUnidadesVendidas: " + unidadesVendidas + muestraCanciones();
+    }
+
+    private String muestraCanciones(){
+        String resultado = "";
+        for (Cancion cancion : canciones){
+            resultado = resultado + cancion.toString();
+        }
+        return resultado;
+    }
 }

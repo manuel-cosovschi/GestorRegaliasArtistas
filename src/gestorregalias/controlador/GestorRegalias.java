@@ -105,4 +105,62 @@ public class GestorRegalias {
         // Mostrar total de la liquidación
         System.out.println("Total de la liquidación: " + totalLiquidacion);
     }
+
+    //Consulta de los datos completos de los artitas
+    public void mostrarDatosArtista (int cantidadIntegrantes, String generoMusical){
+        TreeSet<Artista> artistasFiltrados = new TreeSet<Artista>();
+
+        if (cantidadIntegrantes <= 0 && generoMusical.equals("")){
+            System.out.println ("No se ingreso ningún filtro");
+            return;
+        }
+
+        if (cantidadIntegrantes > 0 && !generoMusical.equals("")){
+            for (Artista artista : artistas){
+                if (artista.getCantidadIntegrantes() == cantidadIntegrantes && artista.getGeneroMusical().equals(generoMusical)){
+                    artistasFiltrados.add(artista);
+                }
+            }
+        }
+        else{
+            if (cantidadIntegrantes > 0){
+                for (Artista artista : artistas){
+                    if (artista.getCantidadIntegrantes() == cantidadIntegrantes){
+                        artistasFiltrados.add(artista);
+                    }
+                }
+            }
+            else{
+                for (Artista artista : artistas){
+                    if (artista.getGeneroMusical().equals(generoMusical)){
+                        artistasFiltrados.add(artista);
+                    }
+                }
+            }
+        }
+
+        for (Artista artista : artistasFiltrados){
+            System.out.println(artista.toString());
+        }
+                    
+    }
+
+    public void eliminarArtista (String identificador){
+        if (identificador.equals("")){
+            System.out.println ("No se ingreso ningún identificador");
+            return;
+        }
+
+        Iterator<Artista> ita = artistas.iterator();
+        Artista artista;
+        while (ita.hasNext()){
+            artista = ita.next();
+            if (artista.getIdentificador().equals(identificador)){
+                ita.remove();
+                System.out.println ("\n Artista " + identificador + " eliminado correctamente.");
+                return;
+            }
+        }
+
+    }
 }

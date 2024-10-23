@@ -20,4 +20,9 @@ public class Recital {
     public Date getFecha() {
         return fecha;
     }
+
+    @Override
+    public String toString() {
+        return "\nFecha: " + fecha + "\nRecaudacion: " + recaudacion + "\nCosto de Produccion: " + costosProduccion;
+    }
 }

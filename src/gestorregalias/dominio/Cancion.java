@@ -18,4 +18,9 @@ public class Cancion {
     public double getReproduccionesParaLiquidacion() {
         return esSencillo ? reproducciones * 1.5 : reproducciones;
     }
+
+    @Override
+    public String toString() {
+        return "\nNombre: " + nombre + "\nDuracion Minutos: " + duracionMinutos + "\nDuracion Segundos: " + duracionSegundos + "\nCantidad Reproducciones: " + reproducciones + "\nEs Sencillo? " + esSencillo;
+    }
 }
