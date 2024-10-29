@@ -15,6 +15,10 @@ public class Cancion {
         this.esSencillo = esSencillo;
     }
 
+    public int getReproducciones() {
+        return reproducciones;
+    }    
+
     public double getReproduccionesParaLiquidacion() {
         return esSencillo ? reproducciones * 1.5 : reproducciones;
     }

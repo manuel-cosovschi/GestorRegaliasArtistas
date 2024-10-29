@@ -5,13 +5,12 @@ import java.io.*;
 import java.util.*;
 
 public class GestorRegalias {
-    private TreeSet<Artista> artistas;
+    private Set<Artista> artistas;
 
     public GestorRegalias() {
-        this.artistas = new TreeSet<>(Comparator.comparing(Artista::getIdentificador));
+        this.artistas = new HashSet<>();
     }
 
-    // Método para cargar datos desde un archivo (XML, JSON, CSV)
     public void cargarDatos(String archivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -40,127 +39,142 @@ public class GestorRegalias {
         }
     }
 
-    // Método para validar los datos cargados
     private boolean validarDatos(String[] datos) {
         if (datos.length != 5) {
             return false;
         }
-        if (datos[0] == null || datos[0].isEmpty()) { // Verifica identificador
-            return false;
-        }
-        if (datos[1] == null || datos[1].isEmpty()) { // Verifica nombre
+        if (datos[0].isEmpty() || datos[1].isEmpty() || datos[3].isEmpty()) {
             return false;
         }
         try {
             int cantidadIntegrantes = Integer.parseInt(datos[2]);
-            if (cantidadIntegrantes < 1) { // Debe haber al menos un integrante
+            if (cantidadIntegrantes < 1) {
                 return false;
             }
         } catch (NumberFormatException e) {
             return false;
         }
-        if (datos[3] == null || datos[3].isEmpty()) { // Verifica género musical
-            return false;
-        }
-        if (!"emergente".equalsIgnoreCase(datos[4]) && !"consagrado".equalsIgnoreCase(datos[4])) { // Verifica tipo
-            return false;
-        }
-        return true;
+        return "emergente".equalsIgnoreCase(datos[4]) || "consagrado".equalsIgnoreCase(datos[4]);
     }
 
-    // Método para listar los artistas
     public void listarArtistas() {
-        artistas.forEach(artista -> System.out.println(artista.getIdentificador() + " - " + artista.getNombre()));
+        for (Artista artista : artistas) {
+            System.out.println(artista.getIdentificador() + " - " + artista.getNombre());
+        }
     }
 
-    // Método para generar la liquidación mensual de un artista
     public void generarLiquidacion(String identificadorArtista) {
-        Artista artista = artistas.stream()
-                .filter(a -> a.getIdentificador().equals(identificadorArtista))
-                .findFirst()
-                .orElse(null);
+        Artista artista = buscarArtista(identificadorArtista);
 
         if (artista == null) {
             System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
             return;
         }
 
-        System.out.println("Liquidación mensual para el artista: " + artista.getNombre());
         double totalLiquidacion = 0;
+        System.out.println("Liquidación mensual para el artista: " + artista.getNombre());
 
-        // Liquidación por discos vendidos
         for (Disco disco : artista.getDiscos()) {
-            double ingresosPorDisco = disco.getUnidadesVendidas() * 10; // Supongamos 10 unidades monetarias por disco
+            double ingresosPorDisco = disco.getUnidadesVendidas() * 10;
             totalLiquidacion += ingresosPorDisco;
             System.out.println("Ingresos por disco '" + disco.getNombre() + "': " + ingresosPorDisco);
         }
 
-        // Liquidación por recitales
         for (Recital recital : artista.getRecitales()) {
             double ingresosNetos = recital.getNeto();
             totalLiquidacion += ingresosNetos;
             System.out.println("Ingresos netos del recital del " + recital.getFecha() + ": " + ingresosNetos);
         }
 
-        // Mostrar total de la liquidación
         System.out.println("Total de la liquidación: " + totalLiquidacion);
     }
 
-    //Consulta de los datos completos de los artitas
-    public void mostrarDatosArtista (int cantidadIntegrantes, String generoMusical){
-        TreeSet<Artista> artistasFiltrados = new TreeSet<Artista>();
+    public void mostrarDatosArtista(int cantidadIntegrantes, String generoMusical) {
+        boolean filtroAplicado = false;
 
-        if (cantidadIntegrantes <= 0 && generoMusical.equals("")){
-            System.out.println ("No se ingreso ningún filtro");
-            return;
-        }
+        for (Artista artista : artistas) {
+            boolean coincide = true;
 
-        if (cantidadIntegrantes > 0 && !generoMusical.equals("")){
-            for (Artista artista : artistas){
-                if (artista.getCantidadIntegrantes() == cantidadIntegrantes && artista.getGeneroMusical().equals(generoMusical)){
-                    artistasFiltrados.add(artista);
-                }
+            if (cantidadIntegrantes > 0 && artista.getCantidadIntegrantes() != cantidadIntegrantes) {
+                coincide = false;
             }
-        }
-        else{
-            if (cantidadIntegrantes > 0){
-                for (Artista artista : artistas){
-                    if (artista.getCantidadIntegrantes() == cantidadIntegrantes){
-                        artistasFiltrados.add(artista);
-                    }
-                }
+
+            if (!generoMusical.isEmpty() && !artista.getGeneroMusical().equalsIgnoreCase(generoMusical)) {
+                coincide = false;
             }
-            else{
-                for (Artista artista : artistas){
-                    if (artista.getGeneroMusical().equals(generoMusical)){
-                        artistasFiltrados.add(artista);
-                    }
-                }
+
+            if (coincide) {
+                System.out.println(artista);
+                filtroAplicado = true;
             }
         }
 
-        for (Artista artista : artistasFiltrados){
-            System.out.println(artista.toString());
+        if (!filtroAplicado) {
+            System.out.println("No se encontraron artistas con los filtros especificados.");
         }
-                    
     }
 
-    public void eliminarArtista (String identificador){
-        if (identificador.equals("")){
-            System.out.println ("No se ingreso ningún identificador");
-            return;
+    public void eliminarArtista(String identificador) {
+        Artista artista = buscarArtista(identificador);
+        if (artista != null) {
+            artistas.remove(artista);
+            System.out.println("Artista " + identificador + " eliminado correctamente.");
+        } else {
+            System.out.println("Artista con identificador " + identificador + " no encontrado.");
         }
+    }
 
-        Iterator<Artista> ita = artistas.iterator();
-        Artista artista;
-        while (ita.hasNext()){
-            artista = ita.next();
-            if (artista.getIdentificador().equals(identificador)){
-                ita.remove();
-                System.out.println ("\n Artista " + identificador + " eliminado correctamente.");
-                return;
+    private Artista buscarArtista(String identificador) {
+        for (Artista artista : artistas) {
+            if (artista.getIdentificador().equals(identificador)) {
+                return artista;
+            }
+        }
+        return null;
+    }
+
+    public void mostrarTop10CancionesPorGenero(String generoMusical) {
+        List<Cancion> canciones = new ArrayList<>();
+
+        for (Artista artista : artistas) {
+            if (artista.getGeneroMusical().equalsIgnoreCase(generoMusical)) {
+                for (Disco disco : artista.getDiscos()) {
+                    canciones.addAll(disco.getCanciones());
+                }
             }
         }
 
+        canciones.sort((c1, c2) -> Integer.compare(c2.getReproducciones(), c1.getReproducciones()));
+
+        System.out.println("Top 10 canciones del género: " + generoMusical);
+        for (int i = 0; i < Math.min(10, canciones.size()); i++) {
+            System.out.println(canciones.get(i));
+        }
+    }
+
+    public void mostrarDetalleUnidadesVendidasPorDisco(String identificadorArtista) {
+        Artista artista = buscarArtista(identificadorArtista);
+
+        if (artista == null) {
+            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+            return;
+        }
+
+        System.out.println("Detalle de unidades vendidas por disco para el artista: " + artista.getNombre());
+        int totalUnidades = 0;
+
+        for (Disco disco : artista.getDiscos()) {
+            int unidadesVendidas = disco.getUnidadesVendidas();
+            totalUnidades += unidadesVendidas;
+            System.out.println("Disco '" + disco.getNombre() + "': " + unidadesVendidas + " unidades vendidas");
+        }
+
+        if (artista.getDiscos().size() > 0) {
+            double promedioUnidades = (double) totalUnidades / artista.getDiscos().size();
+            System.out.println("Promedio de unidades vendidas por disco: " + promedioUnidades);
+        } else {
+            System.out.println("No hay discos registrados para este artista.");
+        }
     }
 }
+  

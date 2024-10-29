@@ -23,6 +23,10 @@ public class Disco {
         return unidadesVendidas;
     }
 
+    public List<Cancion> getCanciones() {
+        return canciones;
+    }    
+
     @Override
     public String toString() {
         return "\nNombre: " + nombre + "\nUnidadesVendidas: " + unidadesVendidas + muestraCanciones();
