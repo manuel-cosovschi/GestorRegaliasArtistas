@@ -2,6 +2,8 @@ package gestorregalias.controlador;
 
 import gestorregalias.dominio.*;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class GestorRegalias {
@@ -10,6 +12,50 @@ public class GestorRegalias {
     public GestorRegalias() {
         this.artistas = new HashSet<>();
     }
+
+    public void agregarArtista(Artista artista) {
+        if (buscarArtista(artista.getIdentificador()) == null) {
+            artistas.add(artista);
+            System.out.println("Artista agregado exitosamente.");
+        } else {
+            System.out.println("Ya existe un artista con ese identificador.");
+        }
+    }
+
+    public void agregarRecital(String identificadorArtista, String fecha, double recaudacion, double costos) {
+        Artista artista = buscarArtista(identificadorArtista);
+        if (artista != null) {
+            try {
+                Date fechaRecital = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
+                Recital recital = new Recital(fechaRecital, recaudacion, costos);
+                artista.getRecitales().add(recital);
+                System.out.println("Recital agregado exitosamente.");
+            } catch (ParseException e) {
+                System.out.println("Fecha en formato incorrecto. Use yyyy-MM-dd.");
+            }
+        } else {
+            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+        }
+    }
+
+    public void agregarCancionADisco(String identificadorArtista, String nombreDisco, Cancion cancion) {
+        Artista artista = buscarArtista(identificadorArtista);
+        if (artista != null) {
+            Optional<Disco> discoOpt = artista.getDiscos().stream()
+                    .filter(disco -> disco.getNombre().equalsIgnoreCase(nombreDisco))
+                    .findFirst();
+    
+            if (discoOpt.isPresent()) {
+                discoOpt.get().getCanciones().add(cancion);
+                System.out.println("Canción agregada exitosamente al disco.");
+            } else {
+                System.out.println("Disco con nombre " + nombreDisco + " no encontrado.");
+            }
+        } else {
+            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+        }
+    }
+    
 
     public void cargarDatos(String archivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {

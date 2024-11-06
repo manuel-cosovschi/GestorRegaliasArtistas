@@ -1,6 +1,10 @@
 package gestorregalias;
 
 import gestorregalias.controlador.GestorRegalias;
+import gestorregalias.dominio.Cancion;
+import gestorregalias.dominio.ArtistaConsagrado;
+import gestorregalias.dominio.ArtistaEmergente;
+
 
 import java.util.Scanner;
 
@@ -10,7 +14,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
 
-        // Cargar datos de CSV o archivo serializado
         System.out.println("¿Desea cargar el estado desde un archivo serializado? (s/n)");
         String respuesta = scanner.nextLine();
         if (respuesta.equalsIgnoreCase("s")) {
@@ -28,7 +31,10 @@ public class Main {
             System.out.println("5. Mostrar detalle de unidades vendidas por disco para un artista");
             System.out.println("6. Dar de baja un artista");
             System.out.println("7. Guardar estado del sistema");
-            System.out.println("8. Salir");
+            System.out.println("8. Registrar un nuevo artista");
+            System.out.println("9. Agregar un recital a un artista");
+            System.out.println("10. Agregar una canción a un disco");
+            System.out.println("11. Salir");
             int opcion = scanner.nextInt();
             scanner.nextLine();
 
@@ -68,6 +74,58 @@ public class Main {
                     gestor.guardarEstado("estado_artistas.ser");
                     break;
                 case 8:
+                    System.out.print("Ingrese el identificador del artista (6 caracteres): ");
+                    String nuevoId = scanner.nextLine();
+                    System.out.print("Ingrese el nombre del artista: ");
+                    String nombre = scanner.nextLine();
+                    System.out.print("Ingrese la cantidad de integrantes: ");
+                    int integrantes = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Ingrese el género musical: ");
+                    String generoNuevo = scanner.nextLine();
+                    System.out.print("¿El artista es emergente o consagrado? (e/c): ");
+                    String tipoArtista = scanner.nextLine();
+
+                    if (tipoArtista.equalsIgnoreCase("e")) {
+                        gestor.agregarArtista(new ArtistaEmergente(nuevoId, nombre, integrantes, generoNuevo));
+                    } else if (tipoArtista.equalsIgnoreCase("c")) {
+                        gestor.agregarArtista(new ArtistaConsagrado(nuevoId, nombre, integrantes, generoNuevo));
+                    } else {
+                        System.out.println("Tipo de artista no válido.");
+                    }
+                    break;
+                case 9:
+                    System.out.print("Ingrese el identificador del artista: ");
+                    String idRecitalArtista = scanner.nextLine();
+                    System.out.print("Ingrese la fecha del recital (yyyy-mm-dd): ");
+                    String fechaStr = scanner.nextLine();
+                    System.out.print("Ingrese la recaudación del recital: ");
+                    double recaudacion = scanner.nextDouble();
+                    System.out.print("Ingrese los costos de producción del recital: ");
+                    double costos = scanner.nextDouble();
+                    scanner.nextLine();
+                    gestor.agregarRecital(idRecitalArtista, fechaStr, recaudacion, costos);
+                    break;
+                case 10:
+                    System.out.print("Ingrese el identificador del artista: ");
+                    String idArtistaDisco = scanner.nextLine();
+                    System.out.print("Ingrese el nombre del disco: ");
+                    String nombreDisco = scanner.nextLine();
+                    System.out.print("Ingrese el nombre de la canción: ");
+                    String nombreCancion = scanner.nextLine();
+                    System.out.print("Ingrese la duración de la canción en minutos: ");
+                    int durMinutos = scanner.nextInt();
+                    System.out.print("Ingrese la duración de la canción en segundos: ");
+                    int durSegundos = scanner.nextInt();
+                    System.out.print("Ingrese la cantidad de reproducciones: ");
+                    int reproducciones = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("¿Es sencillo? (s/n): ");
+                    String esSencillo = scanner.nextLine();
+                    boolean sencillo = esSencillo.equalsIgnoreCase("s");
+                    gestor.agregarCancionADisco(idArtistaDisco, nombreDisco, new Cancion(nombreCancion, durMinutos, durSegundos, reproducciones, sencillo));
+                    break;
+                case 11:
                     continuar = false;
                     System.out.println("Saliendo...");
                     break;
@@ -78,6 +136,7 @@ public class Main {
         scanner.close();
     }
 }
+
 
 
 
