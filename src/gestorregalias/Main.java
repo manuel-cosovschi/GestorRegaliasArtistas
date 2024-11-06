@@ -1,11 +1,9 @@
 package gestorregalias;
 
 import gestorregalias.controlador.GestorRegalias;
-import gestorregalias.dominio.Cancion;
-import gestorregalias.dominio.ArtistaConsagrado;
 import gestorregalias.dominio.ArtistaEmergente;
-
-
+import gestorregalias.dominio.ArtistaConsagrado;
+import gestorregalias.dominio.Cancion;
 import java.util.Scanner;
 
 public class Main {
@@ -58,12 +56,12 @@ public class Main {
                 case 4:
                     System.out.print("Ingrese el género musical: ");
                     String genero = scanner.nextLine();
-                    gestor.mostrarTop10CancionesPorGenero(genero);
+                    gestor.mostrarTop10CancionesPorGenero(genero, "top10_canciones.txt");
                     break;
                 case 5:
                     System.out.print("Ingrese el identificador del artista: ");
                     String idArtista = scanner.nextLine();
-                    gestor.mostrarDetalleUnidadesVendidasPorDisco(idArtista);
+                    gestor.mostrarDetalleUnidadesVendidasPorDisco(idArtista, "detalle_unidades_vendidas.txt");
                     break;
                 case 6:
                     System.out.print("Ingrese el identificador del artista que desea dar de baja: ");

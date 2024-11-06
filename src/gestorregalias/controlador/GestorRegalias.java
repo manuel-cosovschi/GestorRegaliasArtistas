@@ -198,7 +198,7 @@ public class GestorRegalias {
         return null;
     }
 
-    public void mostrarTop10CancionesPorGenero(String generoMusical) {
+    public void mostrarTop10CancionesPorGenero(String generoMusical, String archivoSalida) {
         List<Cancion> canciones = new ArrayList<>();
 
         for (Artista artista : artistas) {
@@ -211,13 +211,20 @@ public class GestorRegalias {
 
         canciones.sort((c1, c2) -> Integer.compare(c2.getReproducciones(), c1.getReproducciones()));
 
-        System.out.println("Top 10 canciones del género: " + generoMusical);
-        for (int i = 0; i < Math.min(10, canciones.size()); i++) {
-            System.out.println(canciones.get(i));
+        try (PrintWriter writer = new PrintWriter(new FileWriter(archivoSalida))) {
+            System.out.println("Top 10 canciones del género: " + generoMusical);
+            writer.println("Top 10 canciones del género: " + generoMusical);
+            for (int i = 0; i < Math.min(10, canciones.size()); i++) {
+                System.out.println(canciones.get(i));
+                writer.println(canciones.get(i));
+            }
+            System.out.println("El reporte se ha guardado en " + archivoSalida);
+        } catch (IOException e) {
+            System.out.println("Error al escribir el archivo: " + e.getMessage());
         }
     }
 
-    public void mostrarDetalleUnidadesVendidasPorDisco(String identificadorArtista) {
+    public void mostrarDetalleUnidadesVendidasPorDisco(String identificadorArtista, String archivoSalida) {
         Artista artista = buscarArtista(identificadorArtista);
 
         if (artista == null) {
@@ -225,20 +232,29 @@ public class GestorRegalias {
             return;
         }
 
-        System.out.println("Detalle de unidades vendidas por disco para el artista: " + artista.getNombre());
-        int totalUnidades = 0;
+        try (PrintWriter writer = new PrintWriter(new FileWriter(archivoSalida))) {
+            System.out.println("Detalle de unidades vendidas por disco para el artista: " + artista.getNombre());
+            writer.println("Detalle de unidades vendidas por disco para el artista: " + artista.getNombre());
+            int totalUnidades = 0;
 
-        for (Disco disco : artista.getDiscos()) {
-            int unidadesVendidas = disco.getUnidadesVendidas();
-            totalUnidades += unidadesVendidas;
-            System.out.println("Disco '" + disco.getNombre() + "': " + unidadesVendidas + " unidades vendidas");
-        }
+            for (Disco disco : artista.getDiscos()) {
+                int unidadesVendidas = disco.getUnidadesVendidas();
+                totalUnidades += unidadesVendidas;
+                System.out.println("Disco '" + disco.getNombre() + "': " + unidadesVendidas + " unidades vendidas");
+                writer.println("Disco '" + disco.getNombre() + "': " + unidadesVendidas + " unidades vendidas");
+            }
 
-        if (artista.getDiscos().size() > 0) {
-            double promedioUnidades = (double) totalUnidades / artista.getDiscos().size();
-            System.out.println("Promedio de unidades vendidas por disco: " + promedioUnidades);
-        } else {
-            System.out.println("No hay discos registrados para este artista.");
+            if (artista.getDiscos().size() > 0) {
+                double promedioUnidades = (double) totalUnidades / artista.getDiscos().size();
+                System.out.println("Promedio de unidades vendidas por disco: " + promedioUnidades);
+                writer.println("Promedio de unidades vendidas por disco: " + promedioUnidades);
+            } else {
+                System.out.println("No hay discos registrados para este artista.");
+                writer.println("No hay discos registrados para este artista.");
+            }
+            System.out.println("El reporte se ha guardado en " + archivoSalida);
+        } catch (IOException e) {
+            System.out.println("Error al escribir el archivo: " + e.getMessage());
         }
     }
 }
