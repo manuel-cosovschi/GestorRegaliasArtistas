@@ -1,9 +1,11 @@
 package gestorregalias.dominio;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Disco {
+public class Disco implements Serializable {
+    private static final long serialVersionUID = 1L; // Agregar serialVersionUID para la serialización
     private String nombre;
     private int unidadesVendidas;
     private List<Cancion> canciones;
@@ -14,7 +16,6 @@ public class Disco {
         this.canciones = new ArrayList<>();
     }
 
-    // Métodos getter y setter, según sea necesario
     public String getNombre() {
         return nombre;
     }

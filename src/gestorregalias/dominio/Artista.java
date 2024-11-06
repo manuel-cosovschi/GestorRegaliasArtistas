@@ -1,10 +1,12 @@
 package gestorregalias.dominio;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Artista implements Comparable<Artista>{
-    private String identificador; // Cadena de 6 caracteres
+public abstract class Artista implements Comparable<Artista>, Serializable {
+    private static final long serialVersionUID = 1L; // Agregar serialVersionUID para la serialización
+    private String identificador;
     private String nombre;
     private int cantidadIntegrantes;
     private String generoMusical;

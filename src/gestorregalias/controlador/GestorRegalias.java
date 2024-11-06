@@ -39,6 +39,25 @@ public class GestorRegalias {
         }
     }
 
+    public void guardarEstado(String archivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
+            oos.writeObject(artistas);
+            System.out.println("Estado guardado exitosamente en " + archivo);
+        } catch (IOException e) {
+            System.out.println("Error al guardar el estado: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void cargarEstado(String archivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+            artistas = (Set<Artista>) ois.readObject();
+            System.out.println("Estado cargado exitosamente desde " + archivo);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al cargar el estado: " + e.getMessage());
+        }
+    }
+
     private boolean validarDatos(String[] datos) {
         if (datos.length != 5) {
             return false;

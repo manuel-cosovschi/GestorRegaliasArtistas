@@ -7,12 +7,17 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         GestorRegalias gestor = new GestorRegalias();
-        System.out.println("Bienvenido al sistema de gestión de regalías de artistas.");
-        gestor.cargarDatos("datos_artistas.csv");
-        gestor.listarArtistas();
-
         Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
+
+        // Cargar datos de CSV o archivo serializado
+        System.out.println("¿Desea cargar el estado desde un archivo serializado? (s/n)");
+        String respuesta = scanner.nextLine();
+        if (respuesta.equalsIgnoreCase("s")) {
+            gestor.cargarEstado("estado_artistas.ser");
+        } else {
+            gestor.cargarDatos("datos_artistas.csv");
+        }
 
         while (continuar) {
             System.out.println("\nSeleccione una opción:");
@@ -22,7 +27,8 @@ public class Main {
             System.out.println("4. Consultar top 10 canciones por género musical");
             System.out.println("5. Mostrar detalle de unidades vendidas por disco para un artista");
             System.out.println("6. Dar de baja un artista");
-            System.out.println("7. Salir");
+            System.out.println("7. Guardar estado del sistema");
+            System.out.println("8. Salir");
             int opcion = scanner.nextInt();
             scanner.nextLine();
 
@@ -59,6 +65,9 @@ public class Main {
                     gestor.eliminarArtista(identificadorBaja);
                     break;
                 case 7:
+                    gestor.guardarEstado("estado_artistas.ser");
+                    break;
+                case 8:
                     continuar = false;
                     System.out.println("Saliendo...");
                     break;
@@ -69,5 +78,6 @@ public class Main {
         scanner.close();
     }
 }
+
 
 

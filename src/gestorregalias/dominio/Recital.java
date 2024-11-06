@@ -1,8 +1,10 @@
 package gestorregalias.dominio;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Recital {
+public class Recital implements Serializable {
+    private static final long serialVersionUID = 1L; // Agregar serialVersionUID para la serialización
     private Date fecha;
     private double recaudacion;
     private double costosProduccion;
