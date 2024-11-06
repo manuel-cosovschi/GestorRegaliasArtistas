@@ -1,5 +1,14 @@
-A001,Los Novatos,5,Rock,emergente
-A002,Melodías Consagradas,3,Pop,consagrado
-A003,Los Revolucionarios,6,Jazz,emergente
-A004,Estrellas del Ritmo,4,Clásica,consagrado
-A005,Rap Masters,2,Hip-Hop,emergente
+Artista,A001,Los Novatos,5,Rock,emergente
+Artista,A002,Melodías Consagradas,3,Pop,consagrado
+Artista,A003,Los Revolucionarios,6,Jazz,emergente
+Artista,A004,Estrellas del Ritmo,4,Clásica,consagrado
+Artista,A005,Rap Masters,2,Hip-Hop,emergente
+Disco,Pepes,100,5,A001
+Disco,Juanes,1000,7,A001
+Disco,Nenes,50,8,A002
+Disco,Padres,500,5,A003
+Disco,Conejos,200,3,A004
+Disco,Perros,500,4,A005
+Cancion,Pepe,2,30,2000,1,0.02,Pepes
+Cancion,Juan,2,30,1000,1,0.03,Juanes
+Recital,2024-01-01,100000,50000,A001

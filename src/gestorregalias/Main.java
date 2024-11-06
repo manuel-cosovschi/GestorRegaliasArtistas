@@ -121,7 +121,7 @@ public class Main {
                     System.out.print("¿Es sencillo? (s/n): ");
                     String esSencillo = scanner.nextLine();
                     boolean sencillo = esSencillo.equalsIgnoreCase("s");
-                    gestor.agregarCancionADisco(idArtistaDisco, nombreDisco, new Cancion(nombreCancion, durMinutos, durSegundos, reproducciones, sencillo));
+                    gestor.agregarCancionADisco(idArtistaDisco, nombreDisco, new Cancion(nombreCancion, durMinutos, durSegundos, reproducciones, sencillo,0));
                     break;
                 case 11:
                     continuar = false;

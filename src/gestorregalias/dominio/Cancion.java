@@ -6,13 +6,15 @@ public class Cancion {
     private int duracionSegundos;
     private int reproducciones;
     private boolean esSencillo;
+    private float precioXReproduccion;
 
-    public Cancion(String nombre, int duracionMinutos, int duracionSegundos, int reproducciones, boolean esSencillo) {
+    public Cancion(String nombre, int duracionMinutos, int duracionSegundos, int reproducciones, boolean esSencillo, float precioXReproduccion) {
         this.nombre = nombre;
         this.duracionMinutos = duracionMinutos;
         this.duracionSegundos = duracionSegundos;
         this.reproducciones = reproducciones;
         this.esSencillo = esSencillo;
+        this.precioXReproduccion = precioXReproduccion;
     }
 
     public int getReproducciones() {
@@ -25,6 +27,6 @@ public class Cancion {
 
     @Override
     public String toString() {
-        return "\nNombre: " + nombre + "\nDuracion Minutos: " + duracionMinutos + "\nDuracion Segundos: " + duracionSegundos + "\nCantidad Reproducciones: " + reproducciones + "\nEs Sencillo? " + esSencillo;
+        return "\nNombre: " + nombre + "\nDuracion Minutos: " + duracionMinutos + "\nDuracion Segundos: " + duracionSegundos + "\nCantidad Reproducciones: " + reproducciones + "\nEs Sencillo? " + esSencillo + "\n Precio por reproduccion: " + precioXReproduccion;
     }
 }

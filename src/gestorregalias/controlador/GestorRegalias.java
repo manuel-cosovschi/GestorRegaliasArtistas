@@ -4,15 +4,20 @@ import gestorregalias.dominio.*;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 public class GestorRegalias {
-    private Set<Artista> artistas;
+    private TreeSet<Artista> artistas;
 
     public GestorRegalias() {
-        this.artistas = new HashSet<>();
+        this.artistas = new TreeSet<>();
     }
 
+    /**
+     * Permite agregar un artista a la lista de artistas.
+     * @param artista
+     */
     public void agregarArtista(Artista artista) {
         if (buscarArtista(artista.getIdentificador()) == null) {
             artistas.add(artista);
@@ -22,15 +27,22 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Permite agregar un recital a la lista de recitales
+     * @param identificadorArtista
+     * @param fecha
+     * @param recaudacion
+     * @param costos
+     */
     public void agregarRecital(String identificadorArtista, String fecha, double recaudacion, double costos) {
         Artista artista = buscarArtista(identificadorArtista);
         if (artista != null) {
             try {
-                Date fechaRecital = new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
+                LocalDate fechaRecital = LocalDate.parse(fecha);
                 Recital recital = new Recital(fechaRecital, recaudacion, costos);
                 artista.getRecitales().add(recital);
                 System.out.println("Recital agregado exitosamente.");
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 System.out.println("Fecha en formato incorrecto. Use yyyy-MM-dd.");
             }
         } else {
@@ -38,6 +50,12 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Permite agregar una cancion al disco.
+     * @param identificadorArtista
+     * @param nombreDisco
+     * @param cancion
+     */
     public void agregarCancionADisco(String identificadorArtista, String nombreDisco, Cancion cancion) {
         Artista artista = buscarArtista(identificadorArtista);
         if (artista != null) {
@@ -56,35 +74,79 @@ public class GestorRegalias {
         }
     }
     
-
+    /**
+     * Carga los datos del artista, disco, cancion y recital del archivo datos_artistas.csv.
+     * @param archivo
+     */
     public void cargarDatos(String archivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                if (validarDatos(datos)) {
-                    String identificador = datos[0];
-                    String nombre = datos[1];
-                    int cantidadIntegrantes = Integer.parseInt(datos[2]);
-                    String generoMusical = datos[3];
-                    String tipo = datos[4];
 
-                    Artista artista;
-                    if ("emergente".equalsIgnoreCase(tipo)) {
-                        artista = new ArtistaEmergente(identificador, nombre, cantidadIntegrantes, generoMusical);
-                    } else {
-                        artista = new ArtistaConsagrado(identificador, nombre, cantidadIntegrantes, generoMusical);
-                    }
-                    artistas.add(artista);
-                } else {
-                    System.out.println("Error en la línea: " + linea + ". Datos inválidos.");
+                switch (datos[0]) {
+                    case "Artista":
+                        if (validarDatos(datos)) {
+                            String identificador = datos[1];
+                            String nombre = datos[2];
+                            int cantidadIntegrantes = Integer.parseInt(datos[3]);
+                            String generoMusical = datos[4];
+                            String tipo = datos[5];
+        
+                            Artista artista;
+                            if ("emergente".equalsIgnoreCase(tipo)) {
+                                artista = new ArtistaEmergente(identificador, nombre, cantidadIntegrantes, generoMusical);
+                            } else {
+                                artista = new ArtistaConsagrado(identificador, nombre, cantidadIntegrantes, generoMusical);
+                            }
+                            artistas.add(artista);
+                        } else {
+                            System.out.println("Error en la línea: " + linea + ". Datos inválidos.");
+                        }
+                        break;
+                    case "Disco":
+                        String nombreDisco = datos[1];
+                        int unidadesVendidas = Integer.parseInt(datos[2]);
+                        float precioVentaXUnidad = Float.parseFloat(datos[3]);
+                        String nombreArtista = datos[4];
+                        
+                        Disco disco = new Disco(nombreDisco, unidadesVendidas, precioVentaXUnidad);
+                        buscarArtista(nombreArtista).agregarDisco(disco);
+                        break;
+                    case "Cancion":
+                        String nombreCancion = datos[1];
+                        int duracionMinutos = Integer.parseInt(datos[2]);
+                        int duracionSegundos = Integer.parseInt(datos[3]);
+                        int reproducciones = Integer.parseInt(datos[4]);
+                        Boolean esSencillo = Boolean.parseBoolean(datos[5]);
+                        float precioXReproduccion = Float.parseFloat(datos[6]);
+                        String nombreDiscoArtista = datos[7];
+
+                        Cancion cancion = new Cancion(nombreCancion, duracionMinutos, duracionSegundos, reproducciones, esSencillo, precioXReproduccion);
+                        buscarDisco(nombreDiscoArtista).agregarCancion(cancion);
+                        break;
+                    case "Recital":
+                        LocalDate fecha = LocalDate.parse(datos[1]);
+                        float recaudacion = Float.parseFloat(datos[2]);
+                        float costReproduccion = Float.parseFloat(datos[3]);
+                        String nombreRecitalArtista = datos[4];
+                        
+                        Recital recital = new Recital(fecha, recaudacion, costReproduccion);
+                        buscarArtista(nombreRecitalArtista).agregarRecital(recital);
+                        break;
+                    default:
+
                 }
-            }
+            }   
         } catch (IOException e) {
             System.out.println("Error al cargar los datos: " + e.getMessage());
         }
     }
 
+    /**
+     * Guarda el estado en el que se encuentra el sistema en un archivo .ser.
+     * @param archivo
+     */
     public void guardarEstado(String archivo) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(artistas);
@@ -94,40 +156,56 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Carga el archivo .ser. Devuelve el sistema al estado en el que se encontraba antes de cerrarse.
+     * @param archivo
+     */
     @SuppressWarnings("unchecked")
     public void cargarEstado(String archivo) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            artistas = (Set<Artista>) ois.readObject();
+            artistas = (TreeSet<Artista>) ois.readObject();
             System.out.println("Estado cargado exitosamente desde " + archivo);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error al cargar el estado: " + e.getMessage());
         }
     }
 
+    /**
+     * Valida que los datos del artista cuando se cargan son correctos.
+     * @param datos
+     * @return
+     */
     private boolean validarDatos(String[] datos) {
-        if (datos.length != 5) {
+        if (datos.length != 6) {
             return false;
         }
-        if (datos[0].isEmpty() || datos[1].isEmpty() || datos[3].isEmpty()) {
+        if (datos[1].isEmpty() || datos[2].isEmpty() || datos[4].isEmpty()) {
             return false;
         }
         try {
-            int cantidadIntegrantes = Integer.parseInt(datos[2]);
+            int cantidadIntegrantes = Integer.parseInt(datos[3]);
             if (cantidadIntegrantes < 1) {
                 return false;
             }
         } catch (NumberFormatException e) {
             return false;
         }
-        return "emergente".equalsIgnoreCase(datos[4]) || "consagrado".equalsIgnoreCase(datos[4]);
+        return "emergente".equalsIgnoreCase(datos[5]) || "consagrado".equalsIgnoreCase(datos[5]);
     }
 
+    /**
+     * Lista los diferentes artistas que tiene la coleccion artistas.
+     */
     public void listarArtistas() {
         for (Artista artista : artistas) {
             System.out.println(artista.getIdentificador() + " - " + artista.getNombre());
         }
     }
 
+    /**
+     * Funcion que generra la liquidacion de cada artista.
+     * @param identificadorArtista
+     */
     public void generarLiquidacion(String identificadorArtista) {
         Artista artista = buscarArtista(identificadorArtista);
 
@@ -154,6 +232,11 @@ public class GestorRegalias {
         System.out.println("Total de la liquidación: " + totalLiquidacion);
     }
 
+    /**
+     * Muestra todos los datos que tiene el artista.
+     * @param cantidadIntegrantes
+     * @param generoMusical
+     */
     public void mostrarDatosArtista(int cantidadIntegrantes, String generoMusical) {
         boolean filtroAplicado = false;
 
@@ -179,6 +262,10 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Elimina el artista de la coleccion de artistas basandose en su identificador.
+     * @param identificador
+     */
     public void eliminarArtista(String identificador) {
         Artista artista = buscarArtista(identificador);
         if (artista != null) {
@@ -189,6 +276,11 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Busca el artista segun su identificador.
+     * @param identificador
+     * @return
+     */
     private Artista buscarArtista(String identificador) {
         for (Artista artista : artistas) {
             if (artista.getIdentificador().equals(identificador)) {
@@ -198,6 +290,30 @@ public class GestorRegalias {
         return null;
     }
 
+    /**
+     * Busca en cada artista un disco que se le pasa por parametro.
+     * @param identificador
+     * @return
+     */
+    private Disco buscarDisco(String identificador) {
+        List<Disco> discosArtista;
+        for (Artista artista : artistas) {
+            discosArtista = artista.getDiscos();
+            for (Disco disco : discosArtista) {
+                if (disco.getNombre().equals(identificador)) {
+                    return disco;
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Muestra el top 10 de canciones por genero musical.
+     * @param generoMusical
+     * @param archivoSalida
+     */
     public void mostrarTop10CancionesPorGenero(String generoMusical, String archivoSalida) {
         List<Cancion> canciones = new ArrayList<>();
 

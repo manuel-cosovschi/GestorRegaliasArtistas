@@ -1,15 +1,15 @@
 package gestorregalias.dominio;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Recital implements Serializable {
     private static final long serialVersionUID = 1L; // Agregar serialVersionUID para la serialización
-    private Date fecha;
+    private LocalDate fecha;
     private double recaudacion;
     private double costosProduccion;
 
-    public Recital(Date fecha, double recaudacion, double costosProduccion) {
+    public Recital(LocalDate fecha, double recaudacion, double costosProduccion) {
         this.fecha = fecha;
         this.recaudacion = recaudacion;
         this.costosProduccion = costosProduccion;
@@ -19,7 +19,7 @@ public class Recital implements Serializable {
         return recaudacion - costosProduccion;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 

@@ -12,14 +12,21 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     private String generoMusical;
     private List<Disco> discos;
     private List<Recital> recitales;
+    private float porcentajeRegaliaDisco;
+    private float porcentajeRegaliaCancion;
+    private float porcentajeRegaliaRecital;
+    
 
-    public Artista(String identificador, String nombre, int cantidadIntegrantes, String generoMusical) {
+    public Artista(String identificador, String nombre, int cantidadIntegrantes, String generoMusical, float porcentajeRegaliaCancion, float porcentajeRegaliaDisco, float porcentajeRegaliaRecital) {
         this.identificador = identificador;
         this.nombre = nombre;
         this.cantidadIntegrantes = cantidadIntegrantes;
         this.generoMusical = generoMusical;
         this.discos = new ArrayList<>();
         this.recitales = new ArrayList<>();
+        this.porcentajeRegaliaCancion = porcentajeRegaliaCancion;
+        this.porcentajeRegaliaDisco = porcentajeRegaliaDisco;
+        this.porcentajeRegaliaRecital = porcentajeRegaliaRecital;
     }
 
     // Métodos getter
@@ -47,6 +54,7 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
         return recitales;
     }
 
+
     @Override
     public int compareTo(Artista o) {
         return this.identificador.compareTo(o.identificador);
@@ -71,11 +79,31 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
         return resultado;
     }
 
+    /**
+     * Muestra los recitales que estan en la lista de recitales.
+     * @return
+     */
     private String muestraRecitales(){
         String resultado = "";
         for (Recital recital : recitales){
             resultado = resultado + recital.toString();
         }
         return resultado;
+    }
+
+    /**
+     * Agrega un discoo a la lista de discos.
+     * @param disco
+     */
+    public void agregarDisco(Disco disco){
+        discos.add(disco);
+    }
+
+    /**
+     * Agrega un recital a la lista de recitales.
+     * @param recital
+     */
+    public void agregarRecital(Recital recital){
+        recitales.add(recital);
     }
 }
