@@ -162,7 +162,7 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     }
 
     /**
-     * Agrega un discoo a la lista de discos.
+     * Agrega un disco a la lista de discos.
      * @param disco
      */
     public void agregarDisco(Disco disco){

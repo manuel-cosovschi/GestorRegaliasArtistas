@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"gestorregalias.controlador"},{"l":"gestorregalias.dominio"}];updateSearchResults();
