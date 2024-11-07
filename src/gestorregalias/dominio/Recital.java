@@ -38,6 +38,22 @@ public class Recital implements Serializable {
     }
 
     /**
+     * Devuelve el total recaudado del recital.
+     * @return
+     */
+    public double getRecaudacion() {
+        return recaudacion;
+    }
+
+    /**
+     * Devuelve el costo de la produccion del recital.
+     * @return
+     */
+    public double getCostosProduccion() {
+        return costosProduccion;
+    }
+
+    /**
      * Se redefine el toString para mostrar los datos del recital.
      */
     @Override

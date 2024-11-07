@@ -25,4 +25,25 @@ public class ArtistaConsagrado extends Artista {
     public String toString() {
         return super.toString() + "\n Fecha de consagracion: " + fechaDeConsagracion;
     }
+
+    /**
+     * Calcula el importe por regalia del artista consagrado. Incluye una bonificacion del 5% para cada regalia por ser consagrado.
+     */
+    @Override
+    public Float calculaImportePorRegalia(float importe, String actividad) {
+        float importeRegalia = 0;
+        switch (actividad){
+            case "disco":
+                importeRegalia = importe * ((getPorcentajeRegaliaDisco() + 5) / 100);
+                break;
+            case "cancion":
+            importeRegalia = importe * ((getPorcentajeRegaliaCancion() + 5) / 100);
+                break;
+            case "recital":
+                importeRegalia = importe * ((getPorcentajeRegaliaRecital() + 5) / 100);
+                break;
+            default:
+        }
+        return importeRegalia;
+    }
 }

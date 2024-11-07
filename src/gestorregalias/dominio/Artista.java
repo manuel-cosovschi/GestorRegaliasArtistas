@@ -89,6 +89,30 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     }
 
     /**
+     * Devuelve el porcentaje de regalia del disco.
+     * @return
+     */
+    public float getPorcentajeRegaliaDisco(){
+        return porcentajeRegaliaDisco;
+    }
+
+    /**
+     * Devuelve el porcentaje de regalia del cancion.
+     * @return
+     */
+    public float getPorcentajeRegaliaCancion(){
+        return porcentajeRegaliaCancion;
+    }
+
+    /**
+     * Devuelve el porcentaje de regalia del recital.
+     * @return
+     */
+    public float getPorcentajeRegaliaRecital(){
+        return porcentajeRegaliaRecital;
+    }
+
+    /**
      * Redefinicion dle metodo compareto para comparar por el identificador del artista.
      */
     @Override
@@ -152,4 +176,12 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     public void agregarRecital(Recital recital){
         recitales.add(recital);
     }
+
+    /**
+     * Funcion abstracta que calcula el importe por regalia.
+     * @param importe
+     * @param actividad
+     * @return
+     */
+    public abstract Float calculaImportePorRegalia(float importe, String actividad);
 }

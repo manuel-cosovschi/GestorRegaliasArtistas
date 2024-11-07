@@ -212,22 +212,61 @@ public class GestorRegalias {
             return;
         }
 
+        int totalUnidades = 0;
+        float importeTotalRegalias = 0;
         double totalLiquidacion = 0;
+        double totalRegalias = 0;
+
         System.out.println("Liquidación mensual para el artista: " + artista.getNombre());
+        System.out.println("\nDetalle de conceptos: ");
+        System.out.println("\n\tPorcentaje de regalias por disco: " + artista.getPorcentajeRegaliaDisco() + " %");
+        System.out.println("\n\tPorcentaje por regalias por cancion: " + artista.getPorcentajeRegaliaCancion() + " %");
+        System.out.println("\n\tPorcentaje por regalias por recital: " + artista.getPorcentajeRegaliaRecital() + " %\n");
 
         for (Disco disco : artista.getDiscos()) {
-            double ingresosPorDisco = disco.getUnidadesVendidas() * 10;
+            totalUnidades = disco.getUnidadesVendidas();
+            System.out.println("\n\t Disco: " + disco.getNombre());
+            System.out.println("\n\t Precio por unidad: $" + disco.getprecioXVentaUnidad());
+            System.out.println("\n\t\t Total de unidades vendidas: " + totalUnidades);
+            double ingresosPorDisco = (totalUnidades * disco.getprecioXVentaUnidad());
+            System.out.println("\n\t\t Total ingresos por Disco: $" + (float)ingresosPorDisco);
+            importeTotalRegalias = artista.calculaImportePorRegalia(disco.getprecioXVentaUnidad(),"disco") * totalUnidades;
+            System.out.println("\n\t\t Total precio por porcentaje de regalias: $" + importeTotalRegalias);
+            
             totalLiquidacion += ingresosPorDisco;
-            System.out.println("Ingresos por disco '" + disco.getNombre() + "': " + ingresosPorDisco);
+            totalRegalias += importeTotalRegalias;
+
+            System.out.println("\n\tCanciones: ");
+            double ingresoPorCancion = 0;
+            for (Cancion cancion : disco.getCanciones()) {
+                System.out.println("\n\t\t Nombre: " + cancion.getNombre());
+                System.out.println("\n\t\t Cantidad de reproducciones: " + cancion.getReproducciones());
+                ingresoPorCancion = cancion.getReproduccionesParaLiquidacion() * cancion.getPrecioXReproduccion();
+                System.out.println("\n\t\t\t Total ingreso por reproduccion: $" + (float)ingresoPorCancion);
+                importeTotalRegalias = artista.calculaImportePorRegalia(cancion.getPrecioXReproduccion(), "cancion");
+                System.out.println("\n\t\t\t Total precio por porcentaje de regalias: $" + importeTotalRegalias);
+
+                totalLiquidacion += ingresoPorCancion;
+                totalRegalias += importeTotalRegalias;
+            }
         }
 
+        System.out.println("\n\tRecitales: ");
         for (Recital recital : artista.getRecitales()) {
-            double ingresosNetos = recital.getNeto();
+            System.out.println("\n\t\t Fecha del recital: " + recital.getFecha());
+            System.out.println("\n\t\t\t Total recaudacion: $" + recital.getRecaudacion());
+            System.out.println("\n\t\t\t Total costo de Produccion: $" + recital.getCostosProduccion());
+            float ingresosNetos = (float)(recital.getNeto());
+            System.out.println("\n\t\t\t Total Neto: $" + ingresosNetos);
+            importeTotalRegalias = artista.calculaImportePorRegalia(ingresosNetos, "recital");
+            System.out.println("\n\t\t\t Total precio por porcentaje de regalias: $" + importeTotalRegalias);
+
             totalLiquidacion += ingresosNetos;
-            System.out.println("Ingresos netos del recital del " + recital.getFecha() + ": " + ingresosNetos);
+            totalRegalias += importeTotalRegalias;
         }
 
-        System.out.println("Total de la liquidación: " + totalLiquidacion);
+        System.out.println("\n\nTotal de la liquidación: $" + (float)totalLiquidacion);
+        System.out.println("\nTotal de las regalias: $" + (float)totalRegalias);
     }
 
     /**

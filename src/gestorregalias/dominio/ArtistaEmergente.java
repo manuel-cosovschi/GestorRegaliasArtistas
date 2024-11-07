@@ -20,6 +20,27 @@ public class ArtistaEmergente extends Artista {
     public String toString() {
         return super.toString();
     }
+
+    /**
+     * Calcula el importe por regalia del artista emergente.
+     */
+    @Override
+    public Float calculaImportePorRegalia(float importe, String actividad) {
+        float importeRegalia = 0;
+        switch (actividad){
+            case "disco":
+                importeRegalia = importe * (getPorcentajeRegaliaDisco() / 100);
+                break;
+            case "cancion":
+            importeRegalia = importe * (getPorcentajeRegaliaCancion() / 100);
+                break;
+            case "recital":
+                importeRegalia = importe * (getPorcentajeRegaliaRecital() / 100);
+                break;
+            default:
+        }
+        return importeRegalia;
+    }
 }
 
 

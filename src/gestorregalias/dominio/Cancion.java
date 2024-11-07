@@ -35,11 +35,27 @@ public class Cancion {
     }    
 
     /**
+     * Devuelve el nombre de la cancion.
+     * @return
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
      * Devuelve la cantidad de reproducciones para calcular la liquidacion. Si es sencillo se multiplica por 1.5.
      * @return
      */
     public double getReproduccionesParaLiquidacion() {
         return esSencillo ? reproducciones * 1.5 : reproducciones;
+    }
+
+    /**
+     * Devuelve el precio por reproduccion por cancion.
+     * @return
+     */
+    public float getPrecioXReproduccion() {
+        return precioXReproduccion;
     }
 
     /**

@@ -46,7 +46,15 @@ public class Disco implements Serializable {
      */
     public List<Cancion> getCanciones() {
         return canciones;
-    }    
+    } 
+
+    /**
+     * Devuelve el precio de venta por unidad de disco.
+     * @return
+     */
+    public float getprecioXVentaUnidad(){
+        return precioVentaXUnidad;
+    }
 
     /**
      * Se redefine el metoodo toString para mostrar todos los datos del disco.
