@@ -16,7 +16,16 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     private float porcentajeRegaliaCancion;
     private float porcentajeRegaliaRecital;
     
-
+    /**
+     * Se define el constructor del artista. Setea los atributos con lo indicado en los parametros e inicializa las colecciones.
+     * @param identificador
+     * @param nombre
+     * @param cantidadIntegrantes
+     * @param generoMusical
+     * @param porcentajeRegaliaCancion
+     * @param porcentajeRegaliaDisco
+     * @param porcentajeRegaliaRecital
+     */
     public Artista(String identificador, String nombre, int cantidadIntegrantes, String generoMusical, float porcentajeRegaliaCancion, float porcentajeRegaliaDisco, float porcentajeRegaliaRecital) {
         this.identificador = identificador;
         this.nombre = nombre;
@@ -30,47 +39,84 @@ public abstract class Artista implements Comparable<Artista>, Serializable {
     }
 
     // Métodos getter
+
+    /**
+     * Devuelve el identificador del artista (es unico).
+     * @return
+     */
     public String getIdentificador() {
         return identificador;
     }
 
+    /**
+     * Devuelve el nombre del artista.
+     * @return
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Devuelve la cantidad de integrantes del artista.
+     * @return
+     */
     public int getCantidadIntegrantes() {
         return cantidadIntegrantes;
     }
 
+    /**
+     * Devuelve el genero musical que tiene el artista.
+     * @return
+     */
     public String getGeneroMusical() {
         return generoMusical;
     }
 
+    /**
+     * Devuelve la coleccion de discos del artista.
+     * @return
+     */
     public List<Disco> getDiscos() {
         return discos;
     }
 
+    /**
+     * Devuelve la coleccion de recitales del artista.
+     * @return
+     */
     public List<Recital> getRecitales() {
         return recitales;
     }
 
-
+    /**
+     * Redefinicion dle metodo compareto para comparar por el identificador del artista.
+     */
     @Override
     public int compareTo(Artista o) {
         return this.identificador.compareTo(o.identificador);
     }
 
+    /**
+     * Redefinicion del toString para que muestre los datos del artista.
+     */
     @Override
     public String toString() {
         return "Identificador: " + identificador + "\nNombre: " + nombre + "\nCantidad de Integrantes: " + cantidadIntegrantes + "\nGenero Musical: " + generoMusical + muestraDiscos() + muestraRecitales();
     }
 
+    /**
+     * Redefinicion del metodo equals para comparar por el identificador del artista.
+     */
     @Override
     public boolean equals(Object obj) {
         Artista p = (Artista) obj;
         return this.identificador.equals(p.identificador);
     }
 
+    /**
+     * Muestra los diferentes discos de la lista de discos.
+     * @return
+     */
     private String muestraDiscos(){
         String resultado = "";
         for (Disco disco : discos){

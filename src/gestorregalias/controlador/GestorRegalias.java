@@ -2,8 +2,6 @@ package gestorregalias.controlador;
 
 import gestorregalias.dominio.*;
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -203,7 +201,7 @@ public class GestorRegalias {
     }
 
     /**
-     * Funcion que generra la liquidacion de cada artista.
+     * Funcion que genera la liquidacion de cada artista.
      * @param identificadorArtista
      */
     public void generarLiquidacion(String identificadorArtista) {
@@ -340,6 +338,11 @@ public class GestorRegalias {
         }
     }
 
+    /**
+     * Muestra el reporte de las unidades vendidas por el artista.
+     * @param identificadorArtista
+     * @param archivoSalida
+     */
     public void mostrarDetalleUnidadesVendidasPorDisco(String identificadorArtista, String archivoSalida) {
         Artista artista = buscarArtista(identificadorArtista);
 

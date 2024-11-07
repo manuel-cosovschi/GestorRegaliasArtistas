@@ -1,4 +1,4 @@
-package gestorregalias;
+package interfaz;
 
 import gestorregalias.controlador.GestorRegalias;
 import gestorregalias.dominio.ArtistaEmergente;
@@ -121,7 +121,9 @@ public class Main {
                     System.out.print("¿Es sencillo? (s/n): ");
                     String esSencillo = scanner.nextLine();
                     boolean sencillo = esSencillo.equalsIgnoreCase("s");
-                    gestor.agregarCancionADisco(idArtistaDisco, nombreDisco, new Cancion(nombreCancion, durMinutos, durSegundos, reproducciones, sencillo,0));
+                    System.out.print("¿Cual es su precio por reproduccion?: ");
+                    float precioXreproduccion = scanner.nextFloat();
+                    gestor.agregarCancionADisco(idArtistaDisco, nombreDisco, new Cancion(nombreCancion, durMinutos, durSegundos, reproducciones, sencillo,precioXreproduccion));
                     break;
                 case 11:
                     continuar = false;
