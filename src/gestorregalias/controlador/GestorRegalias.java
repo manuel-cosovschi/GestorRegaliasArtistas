@@ -125,7 +125,7 @@ public class GestorRegalias {
     }
     
     /**
-     * Carga los datos del artista, disco, cancion y recital del archivo datos_artistas.csv.
+     * Carga todos los datos del artista, disco, cancion y recital del archivo datos_artistas.csv.
      * @param archivo
      */
     public void cargarDatos(String archivo) {
@@ -165,7 +165,7 @@ public class GestorRegalias {
     }
 
     /**
-     * Carga el artista
+     * Carga los datos del artista desde el archivo datos_artistas.csv.
      * @param datos, linea
      */
     private void cargarArtista(String[] datos, String linea) {
@@ -197,7 +197,7 @@ public class GestorRegalias {
     }
 
     /**
-     * Carga los disco
+     * Carga los datos del disco desde el archivo datos_artistas.csv.
      * @param datos
      */
     private void cargaDisco(String[] datos) {
@@ -233,7 +233,7 @@ public class GestorRegalias {
     }
 
     /**
-     * Carga los cancion
+     * Carga los datos de la cancion desde el archivo datos_artistas.csv.
      * @param datos
      */
     private  void cargaCancion(String[] datos) {
@@ -271,7 +271,7 @@ public class GestorRegalias {
     }
 
     /**
-     * Carga los recital
+     * Carga los datos del recital desde el archivo datos_artistas.csv.
      * @param datos
      */
     private  void cargaRecital(String[] datos) {
