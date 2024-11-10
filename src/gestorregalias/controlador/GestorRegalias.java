@@ -3,6 +3,7 @@ package gestorregalias.controlador;
 import gestorregalias.dominio.*;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class GestorRegalias {
@@ -19,9 +20,22 @@ public class GestorRegalias {
     public void agregarArtista(Artista artista) {
         if (buscarArtista(artista.getIdentificador()) == null) {
             artistas.add(artista);
-            System.out.println("Artista agregado exitosamente.");
+
+            String mensaje = "Artista agregado exitosamente.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         } else {
-            System.out.println("Ya existe un artista con ese identificador.");
+            String mensaje = "Ya existe un artista con ese identificador.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -39,12 +53,31 @@ public class GestorRegalias {
                 LocalDate fechaRecital = LocalDate.parse(fecha);
                 Recital recital = new Recital(fechaRecital, recaudacion, costos);
                 artista.getRecitales().add(recital);
-                System.out.println("Recital agregado exitosamente.");
+                String mensaje = "Recital agregado exitosamente.";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
             } catch (Exception e) {
-                System.out.println("Fecha en formato incorrecto. Use yyyy-MM-dd.");
+                String mensaje = "Fecha en formato incorrecto. Use yyyy-MM-dd.";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
+
             }
         } else {
-            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+            String mensaje = "Artista con identificador " + identificadorArtista + " no encontrado.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -63,12 +96,31 @@ public class GestorRegalias {
     
             if (discoOpt.isPresent()) {
                 discoOpt.get().getCanciones().add(cancion);
-                System.out.println("Canción agregada exitosamente al disco.");
+
+                String mensaje = "Canción agregada exitosamente al disco.";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
             } else {
-                System.out.println("Disco con nombre " + nombreDisco + " no encontrado.");
+                String mensaje = "Disco con nombre " + nombreDisco + " no encontrado.";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
             }
         } else {
-            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+            String mensaje = "Artista con identificador " + identificadorArtista + " no encontrado.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
     
@@ -82,62 +134,174 @@ public class GestorRegalias {
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
 
-                switch (datos[0]) {
+                String tipoEntidad = datos[0];
+                switch (tipoEntidad) {
                     case "Artista":
-                        if (validarDatos(datos)) {
-                            String identificador = datos[1];
-                            String nombre = datos[2];
-                            int cantidadIntegrantes = Integer.parseInt(datos[3]);
-                            String generoMusical = datos[4];
-                            String tipo = datos[5];
-        
-                            Artista artista;
-                            if ("emergente".equalsIgnoreCase(tipo)) {
-                                artista = new ArtistaEmergente(identificador, nombre, cantidadIntegrantes, generoMusical);
-                            } else {
-                                artista = new ArtistaConsagrado(identificador, nombre, cantidadIntegrantes, generoMusical);
-                            }
-                            artistas.add(artista);
-                        } else {
-                            System.out.println("Error en la línea: " + linea + ". Datos inválidos.");
-                        }
+                        cargarArtista(datos, linea);
                         break;
                     case "Disco":
-                        String nombreDisco = datos[1];
-                        int unidadesVendidas = Integer.parseInt(datos[2]);
-                        float precioVentaXUnidad = Float.parseFloat(datos[3]);
-                        String nombreArtista = datos[4];
-                        
-                        Disco disco = new Disco(nombreDisco, unidadesVendidas, precioVentaXUnidad);
-                        buscarArtista(nombreArtista).agregarDisco(disco);
+                        cargaDisco(datos);
                         break;
                     case "Cancion":
-                        String nombreCancion = datos[1];
-                        int duracionMinutos = Integer.parseInt(datos[2]);
-                        int duracionSegundos = Integer.parseInt(datos[3]);
-                        int reproducciones = Integer.parseInt(datos[4]);
-                        Boolean esSencillo = Boolean.parseBoolean(datos[5]);
-                        float precioXReproduccion = Float.parseFloat(datos[6]);
-                        String nombreDiscoArtista = datos[7];
-
-                        Cancion cancion = new Cancion(nombreCancion, duracionMinutos, duracionSegundos, reproducciones, esSencillo, precioXReproduccion);
-                        buscarDisco(nombreDiscoArtista).agregarCancion(cancion);
+                        cargaCancion(datos);
                         break;
                     case "Recital":
-                        LocalDate fecha = LocalDate.parse(datos[1]);
-                        float recaudacion = Float.parseFloat(datos[2]);
-                        float costReproduccion = Float.parseFloat(datos[3]);
-                        String nombreRecitalArtista = datos[4];
-                        
-                        Recital recital = new Recital(fecha, recaudacion, costReproduccion);
-                        buscarArtista(nombreRecitalArtista).agregarRecital(recital);
+                        cargaRecital(datos);
                         break;
                     default:
 
                 }
-            }   
+            }
         } catch (IOException e) {
-            System.out.println("Error al cargar los datos: " + e.getMessage());
+            String mensaje = "Error al cargar los datos: " + e.getMessage();
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
+        }
+    }
+
+    /**
+     * Carga el artista
+     * @param datos, linea
+     */
+    private void cargarArtista(String[] datos, String linea) {
+        if (validarDatos(datos)) {
+            String identificador = datos[1];
+            String nombre = datos[2];
+            int cantidadIntegrantes = Integer.parseInt(datos[3]);
+            String generoMusical = datos[4];
+            String tipo = datos[5];
+
+            Artista artista;
+            if ("emergente".equalsIgnoreCase(tipo)) {
+                artista = new ArtistaEmergente(identificador, nombre, cantidadIntegrantes, generoMusical);
+            } else {
+                artista = new ArtistaConsagrado(identificador, nombre, cantidadIntegrantes, generoMusical);
+            }
+            artistas.add(artista);
+        } else {
+            String mensaje = "Error en la línea: " + linea + ". Datos inválidos.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
+            System.out.println();
+        }
+    }
+
+    /**
+     * Carga los disco
+     * @param datos
+     */
+    private void cargaDisco(String[] datos) {
+        try {
+            String nombreDisco = datos[1];
+            int unidadesVendidas = Integer.parseInt(datos[2]);
+            float precioVentaXUnidad = Float.parseFloat(datos[3]);
+            String nombreArtista = datos[4];
+
+            Artista artista = buscarArtista(nombreArtista);
+            if(artista != null) {
+                Disco disco = new Disco(nombreDisco, unidadesVendidas, precioVentaXUnidad);
+                artista.agregarDisco(disco);
+            } else {
+                String mensaje = "Artista no encontrado.\"";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
+
+            }
+        } catch (NumberFormatException e) {
+            String mensaje = "Error de formato en los datos.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+        }
+    }
+
+    /**
+     * Carga los cancion
+     * @param datos
+     */
+    private  void cargaCancion(String[] datos) {
+        try {
+            String nombreCancion = datos[1];
+            int duracionMinutos = Integer.parseInt(datos[2]);
+            int duracionSegundos = Integer.parseInt(datos[3]);
+            int reproducciones = Integer.parseInt(datos[4]);
+            Boolean esSencillo = Boolean.parseBoolean(datos[5]);
+            float precioXReproduccion = Float.parseFloat(datos[6]);
+            String nombreDiscoArtista = datos[7];
+
+            Disco disco = buscarDisco(nombreDiscoArtista);
+            if(disco != null) {
+                Cancion cancion = new Cancion(nombreCancion, duracionMinutos, duracionSegundos, reproducciones, esSencillo, precioXReproduccion);
+                disco.agregarCancion(cancion);
+            } else {
+                String mensaje = "Disco no encontrado para canción: " + nombreCancion;
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
+            }
+        } catch (NumberFormatException e) {
+            String mensaje = "Error de formato en los datos de la canción.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+        }
+    }
+
+    /**
+     * Carga los recital
+     * @param datos
+     */
+    private  void cargaRecital(String[] datos) {
+        try {
+            LocalDate fecha = LocalDate.parse(datos[1]);
+            float recaudacion = Float.parseFloat(datos[2]);
+            float costReproduccion = Float.parseFloat(datos[3]);
+            String nombreRecitalArtista = datos[4];
+
+            Artista artista = buscarArtista(nombreRecitalArtista);
+            if (artista != null) {
+                Recital recital = new Recital(fecha, recaudacion, costReproduccion);
+                artista.agregarRecital(recital);
+            } else {
+                String mensaje = "Artista no encontrado para recital.";
+                int longitud = mensaje.length();
+                String borde = "*".repeat(longitud + 4);
+
+                System.out.println("\n" + borde);
+                System.out.println("* " + mensaje + " *");
+                System.out.println(borde + "\n");
+            }
+        } catch (NumberFormatException | DateTimeParseException e) {
+            String mensaje = "Error de formato en los datos del recital.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -148,9 +312,24 @@ public class GestorRegalias {
     public void guardarEstado(String archivo) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(artistas);
-            System.out.println("Estado guardado exitosamente en " + archivo);
+            String mensaje = "Estado guardado exitosamente en " + archivo;
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
         } catch (IOException e) {
-            System.out.println("Error al guardar el estado: " + e.getMessage());
+            String mensaje = "Error al guardar el estado: " + e.getMessage();
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
+            System.out.println();
         }
     }
 
@@ -162,9 +341,22 @@ public class GestorRegalias {
     public void cargarEstado(String archivo) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
             artistas = (TreeSet<Artista>) ois.readObject();
-            System.out.println("Estado cargado exitosamente desde " + archivo);
+            String mensaje = "Estado cargado exitosamente desde " + archivo;
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al cargar el estado: " + e.getMessage());
+            String mensaje = "Error al cargar el estado: " + e.getMessage();
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -208,7 +400,13 @@ public class GestorRegalias {
         Artista artista = buscarArtista(identificadorArtista);
 
         if (artista == null) {
-            System.out.println("Artista con identificador " + identificadorArtista + " no encontrado.");
+            String mensaje = "Artista con identificador " + identificadorArtista + " no encontrado.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
             return;
         }
 
@@ -295,7 +493,13 @@ public class GestorRegalias {
         }
 
         if (!filtroAplicado) {
-            System.out.println("No se encontraron artistas con los filtros especificados.");
+            String mensaje = "No se encontraron artistas con los filtros especificados.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -307,9 +511,22 @@ public class GestorRegalias {
         Artista artista = buscarArtista(identificador);
         if (artista != null) {
             artistas.remove(artista);
-            System.out.println("Artista " + identificador + " eliminado correctamente.");
+            String mensaje = "Artista " + identificador + " eliminado correctamente.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
+
         } else {
-            System.out.println("Artista con identificador " + identificador + " no encontrado.");
+            String mensaje = "Artista con identificador " + identificador + " no encontrado.";
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -345,7 +562,6 @@ public class GestorRegalias {
         return null;
     }
 
-
     /**
      * Muestra el top 10 de canciones por genero musical.
      * @param generoMusical
@@ -373,7 +589,13 @@ public class GestorRegalias {
             }
             System.out.println("El reporte se ha guardado en " + archivoSalida);
         } catch (IOException e) {
-            System.out.println("Error al escribir el archivo: " + e.getMessage());
+            String mensaje = "Error al escribir el archivo: " + e.getMessage();
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 
@@ -412,7 +634,13 @@ public class GestorRegalias {
             }
             System.out.println("El reporte se ha guardado en " + archivoSalida);
         } catch (IOException e) {
-            System.out.println("Error al escribir el archivo: " + e.getMessage());
+            String mensaje = "Error al escribir el archivo: " + e.getMessage();
+            int longitud = mensaje.length();
+            String borde = "*".repeat(longitud + 4);
+
+            System.out.println("\n" + borde);
+            System.out.println("* " + mensaje + " *");
+            System.out.println(borde + "\n");
         }
     }
 }
