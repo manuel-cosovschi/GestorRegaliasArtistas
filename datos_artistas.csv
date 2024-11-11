@@ -11,4 +11,13 @@ Disco,Conejos,200,3,A004
 Disco,Perros,500,4,A005
 Cancion,Pepe,2,30,2000,1,0.02,Pepes
 Cancion,Juan,2,30,1000,1,0.03,Juanes
+Cancion,Paka,1,45,1500,1,0.04,Nenes
+Cancion,Albertito,1,50,500,1,0.05,Padres
+Cancion,Salta,3,10,2000,1,0.03,Conejos
+Cancion,Ladra,3,30,1250,1,0.03,Perros
 Recital,2024-01-01,100000,50000,A001
+Recital,2024-02-08,200000,60000,A002
+Recital,2024-03-09,90000,55000,A003
+Recital,2024-04-08,120000,40000,A004
+Recital,2024-05-07,125000,54000,A005
+Recital,2024-07-07,125000,90000,A005
