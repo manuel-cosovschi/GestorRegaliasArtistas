@@ -1,6 +1,8 @@
 package gestorregalias.dominio;
+import java.io.Serializable;
 
-public class Cancion {
+public class Cancion implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String nombre;
     private int duracionMinutos;
     private int duracionSegundos;
